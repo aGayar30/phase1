@@ -1,3 +1,5 @@
+import os
+
 import cv2
 import numpy as np
 from PIL import Image
@@ -5,12 +7,14 @@ from adjustcontrast import automatic_brightness_and_contrast
 from matplotlib import pyplot as plt
 from backgroundremover import backgroundremover
 
-# Set image path
-path = "Images/"
-fileName = "img (1).png"
+path = 'Images'
+for filename in os.listdir(path):
+    print(str(path+'/'+filename))
+    # Read input image and resize 3shan yb2o kolohom haga wahda bnfs el size for any filters b3d kda:
+    inputImage = cv2.imread(path + '/' + filename)
 
 #removing background
-img=backgroundremover(path+fileName)
+img=backgroundremover(inputImage)
 #cv2.imshow("Image",img)
 
 #adjusting contrast
