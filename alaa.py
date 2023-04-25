@@ -1,31 +1,15 @@
-#importingcv2&numpy:
-import cv2
+# importing cv2 & numpy:
 import numpy as np
-from PIL import Image
-from adjustcontrast import automatic_brightness_and_contrast
-from matplotlib import pyplot as plt
-from backgroundremover import backgroundremover
-
-#inputImage = cv2.imread('8364.png')
+import cv2
 
 # Set image path
 path = "Images/"
 fileName = "img (1).png"
 
-#removing background
-#7oto el images fe nfs l folder w esmaha .png fe l bracket hena taht
-backgroundremoved=backgroundremover(path+fileName)
-cv2.imshow("Image",backgroundremoved)
-
-#adjusting contrast
-
-outputImage,a,b= automatic_brightness_and_contrast(backgroundremoved)
-cv2.imshow("Image",outputImage)
-
 # Read input image and resize 3shan yb2o kolohom haga wahda bnfs el size for any filters b3d kda:
-#inputImage = cv2.imread('13.png')
-inputCopy = outputImage.copy()
-inputImage = cv2.resize(outputImage, (100,75))
+inputImage = cv2.imread(path+fileName)
+inputCopy = inputImage.copy()
+inputImage = cv2.resize(inputImage, (100,75))
 inputCopy = cv2.resize(inputCopy, (100,75))
 
 # Convert BGR to grayscale:
@@ -66,8 +50,12 @@ maxKernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernelSize, kernelSize))
 # Perform closing:
 closingImage = cv2.morphologyEx(filteredImage, cv2.MORPH_CLOSE, maxKernel, None, None, opIterations, cv2.BORDER_REFLECT101)
 
+#perform smoothing
+smoothedImage = cv2.GaussianBlur(closingImage,(5,5),0)
+
+
 # perform canny edge detection:
-edge_image = cv2.Canny(grayscaleImage, 100, 200)
+edge_image = cv2.Canny(smoothedImage, 100, 200)
 
 # Get each bounding box
 # Find the big contours on the filtered image:
@@ -89,7 +77,7 @@ print(len(boundRect))
 for i in range(len(boundRect)):
     color = (0, 255, 0)
     #filter contours according to the area of the rectangle (parameter re5em)
-    if (int(boundRect[i][2])*int(boundRect[i][3])>100 and int(boundRect[i][2])*int(boundRect[i][3])<1000 ):
+    if (int(boundRect[i][2])*int(boundRect[i][3])>100 and int(boundRect[i][2])*int(boundRect[i][3])<10000 ):
         cv2.rectangle(inputCopy, (int(boundRect[i][0]), int(boundRect[i][1])),
                   (int(boundRect[i][0] + boundRect[i][2]), int(boundRect[i][1] + boundRect[i][3])), color, 2)
 

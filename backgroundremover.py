@@ -49,6 +49,6 @@ def backgroundremover(image):
     masked = (mask_stack * img) + ((1-mask_stack) * MASK_COLOR)
     masked = (masked * 255).astype('uint8')
 
-    cv2.imshow('img', masked)                                   # Display
-    cv2.waitKey()
+    #cv2.imshow('img', masked)                                   # Display
+    #cv2.waitKey()
     return masked
